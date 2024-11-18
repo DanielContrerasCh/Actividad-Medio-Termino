@@ -3,18 +3,15 @@ using UnityEngine;
 public class ProjectileMovement : MonoBehaviour
 {
     public float speed = 10f;
-    public float lifeTime = 5f;
     private float minY = -3.46f;
-    private float maxY = 5; // Límite vertical ajustado al tamaño del mapa
-    private float horizontalLimit = 10f; // Límite horizontal ajustado al tamaño del mapa
+    private float maxY = 4.5f; // Límite vertical ajustado al tamaño del mapa
     private float minX = -10.78f;
-    private float maxX = 10.7;
+    private float maxX = 10.7f;
 
     void Start()
     {
         // Incrementar el contador al instanciar el proyectil
         ProjectileManager.Instance.IncrementCount();
-        Destroy(gameObject, lifeTime);
     }
 
     void Update()
@@ -23,9 +20,10 @@ public class ProjectileMovement : MonoBehaviour
         transform.Translate(Vector3.up * speed * Time.deltaTime);
 
         // Verificar si el proyectil ha salido del área visible de la cámara (vertical y horizontal)
-        if (Mathf.Abs(transform.position.y) > verticalLimit || Mathf.Abs(transform.position.x) > horizontalLimit)
+        if (transform.position.y > maxY || transform.position.x > maxX || transform.position.x < minX || transform.position.y < minY)
         {
             Destroy(gameObject);
+            return;
         }
     }
 

@@ -3,13 +3,7 @@ using UnityEngine;
 public class EnemyProjectile : MonoBehaviour
 {
     public float speed = 5f;
-    public float lifeTime = 2f;
-
-    void Start()
-    {
-        Destroy(gameObject, lifeTime);
-    }
-
+    
     void Update()
     {
         // Mover el proyectil hacia abajo
