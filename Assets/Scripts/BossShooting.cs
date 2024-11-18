@@ -6,11 +6,11 @@ public class BossShooting : MonoBehaviour
     public GameObject projectileType1;
     public GameObject projectileType2;
     public GameObject projectileType3;
-    public Transform firePoint; // Punto de disparo
+    public Transform firePoint;
     public float fireRate = 0.2f;
     public float moveSpeed = 2f;
     public float minY, maxY;
-    public Vector3 firePointOffset = new Vector3(0, 1f, 0); // Ajusta el offset vertical
+    public Vector3 firePointOffset = new Vector3(0, 1f, 0);
 
     private enum ShootMode { Type1, Type2, Type3 }
     private ShootMode currentMode;
@@ -20,9 +20,10 @@ public class BossShooting : MonoBehaviour
 
     void Start()
     {
+        // El jefe se inicia desactivado, no necesitamos iniciar la corrutina aquí
+        gameObject.SetActive(false);
         currentMode = ShootMode.Type1;
         SetNewTargetPosition();
-        StartCoroutine(ChangeShootingMode());
     }
 
     void Update()
@@ -37,6 +38,12 @@ public class BossShooting : MonoBehaviour
 
         // Ajustar la posición del FirePoint con un offset
         firePoint.position = transform.position + firePointOffset;
+    }
+
+    public void ActivateBoss()
+    {
+        // Iniciar la corrutina para cambiar el modo de disparo cuando el jefe es activado
+        StartCoroutine(ChangeShootingMode());
     }
 
     void Shoot()
