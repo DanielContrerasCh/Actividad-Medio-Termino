@@ -20,7 +20,6 @@ public class BossShooting : MonoBehaviour
 
     void Start()
     {
-        // El jefe se inicia desactivado, no necesitamos iniciar la corrutina aquí
         gameObject.SetActive(false);
         currentMode = ShootMode.Type1;
         SetNewTargetPosition();

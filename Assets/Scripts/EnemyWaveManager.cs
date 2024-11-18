@@ -9,7 +9,7 @@ public class EnemyWaveManager : MonoBehaviour
     public GameObject boss;
     public TextMeshProUGUI enemyCounterText;
     public float waveDuration = 10f;
-    public float startX; // Posición inicial fuera de la pantalla a la derecha
+    public float startX;
     public float moveSpeed = 3f;
     private int activeEnemies = 0;
 
@@ -67,40 +67,33 @@ public class EnemyWaveManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        // Primera oleada: grupo de enemigos apareciendo desde la derecha
+        // Misma lógica, pero esta vez con ambos grupos combinados
         Vector3 combinedSpawnPosition = new Vector3(startX, 2.323458f, 0);
         GameObject combinedEnemyGroup = Instantiate(enemyGroupPrefab, combinedSpawnPosition, Quaternion.identity);
         UpdateEnemyCount(combinedEnemyGroup.transform.childCount);
 
-        // Mover el grupo hacia la izquierda hasta alcanzar el límite derecho (x = 9.88)
         while (combinedEnemyGroup.transform.position.x > 9.88f)
         {
             combinedEnemyGroup.transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // Iniciar el movimiento de izquierda a derecha dentro de los límites
         combinedEnemyGroup.GetComponent<EnemyGroupController>().StartMoving();
 
-        // Segunda oleada: columna de enemigos apareciendo desde la izquierda
         Vector3 combinedColumnSpawnPosition = new Vector3(-12f, 2.08f, -1.005571f);
         GameObject combinedEnemyColumn = Instantiate(enemyColumnPrefab, combinedColumnSpawnPosition, Quaternion.identity);
         UpdateEnemyCount(combinedEnemyColumn.transform.childCount);
 
-        // Mover la columna hacia la derecha hasta alcanzar el borde izquierdo (x = -9.88)
         while (combinedEnemyColumn.transform.position.x < -2.89f)
         {
             combinedEnemyColumn.transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // Iniciar el movimiento vertical (arriba y abajo)
         combinedEnemyColumn.GetComponent<EnemyColumnController>().StartMoving();
 
-                // Esperar la duración de la segunda oleada
         yield return new WaitForSeconds(waveDuration);
 
-        // Mover la columna hacia la izquierda para desaparecer
         StartCoroutine(MoveLeftAndDestroy(combinedEnemyColumn));
         StartCoroutine(MoveUpAndDestroy(combinedEnemyGroup));
 
@@ -157,7 +150,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             boss.SetActive(true);
             boss.GetComponent<BossShooting>().ActivateBoss();
-            UpdateEnemyCount(1); // Incrementar el contador de enemigos al activar el jefe
+            UpdateEnemyCount(1);
         }
     }
 }
